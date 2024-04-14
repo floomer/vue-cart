@@ -15,8 +15,6 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-
 const props = defineProps({
   product: Object,
   exchange: String | Number,
@@ -35,8 +33,6 @@ const emit = defineEmits(["add-to-cart"]);
   background-color: #08376b;
   font-weight: 600;
   padding: 5px;
-}
-.product__header-header {
 }
 .product__body {
   display: flex;
