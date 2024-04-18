@@ -5,22 +5,31 @@
     </div>
     <div class="product__body">
       <div class="product__body-product" v-for="item in product[1]" :key="item">
-        <span class="product__name" @click="$emit('add-to-cart', item)"
-          >{{ item.name }}({{ item.amount }})</span
-        >
-        <h5>{{ Math.round(item.cost * exchange) }}</h5>
+        <span class="product__name" @click="handleAddToCart(item)">
+          {{ item.name }}
+          <span>({{ item.amount }})</span>
+        </span>
+        <span>{{ item.cost }}</span>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
-const props = defineProps({
-  product: Object,
-  exchange: String | Number,
-});
+<script lang="ts" setup>
+import { useCartStore } from '../store/Store';
+import type { Product } from '../types/Product';
 
-const emit = defineEmits(["add-to-cart"]);
+defineProps<{ product: Product; }>();
+
+const store = useCartStore()
+
+function handleAddToCart(product) {
+  const item = store.cart.find((item) => item.id === product.id);
+  if (!item) {
+    store.addToCart(product)
+  }
+}
+
 </script>
 
 <style scoped>
@@ -29,11 +38,13 @@ const emit = defineEmits(["add-to-cart"]);
   flex-direction: column;
   flex-wrap: wrap;
 }
+
 .product__header {
   background-color: #08376b;
   font-weight: 600;
   padding: 5px;
 }
+
 .product__body {
   display: flex;
   background-color: white;
@@ -42,6 +53,9 @@ const emit = defineEmits(["add-to-cart"]);
 
   flex-wrap: wrap;
 }
+
+
+
 .product__body-product {
   display: flex;
   justify-content: space-between;
@@ -50,6 +64,11 @@ const emit = defineEmits(["add-to-cart"]);
   border: 1px solid gray;
   width: -webkit-fill-available;
 }
+
+.product__body-product:hover {
+  background-color: lightgray;
+}
+
 .product__name {
   width: 300px;
   cursor: pointer;

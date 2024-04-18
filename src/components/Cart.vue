@@ -6,49 +6,36 @@
       <th>Стоимость</th>
     </tr>
     <tr v-for="product in cart" :key="product.id">
-      <td>{{ product.product.name }}</td>
+      <td>{{ product.name }}</td>
       <td>
-        <input
-          type="number"
-          class="cart__table-amount"
-          :value="product.amount"
-          @blur="onBlur(product, $event)"
-        />
+        <input type="number" class="cart__table-amount" value="1" @blur="onBlur(product, $event)" />
         <span>шт.</span>
       </td>
       <td>
-        {{ Math.round(product.product.cost * exchange * product.amount) }}/шт.
+        {{ Math.round(product.cost) }}/шт.
       </td>
-      <button
-        class="cart__table-delete"
-        @click="$emit('delete-from-cart', product.product)"
-      >
+      <button class="cart__table-delete" @click="$emit('delete-from-cart', product)">
         x
       </button>
     </tr>
   </table>
 </template>
-<script setup>
-const props = defineProps({
-  cart: Array,
-  exchange: String | Number,
-  result: Number,
-});
-const emit = defineEmits(["delete-from-cart", "update:result"]);
+<script lang="ts" setup>
+import { useCartStore } from '../store/Store';
+const store = useCartStore()
+const cart = store.cart
+// console.log(store.cart)
 
-const onBlur = (product, e) => {
-  props.cart.forEach((item) => {
-    if (item.product.id === product.product.id) {
-      item.amount = e.target.value;
-      emit("update:result", item.amount * item.product.cost);
-    }
-  });
+const onBlur = (product, event) => {
+  console.log(product)
 };
+
 </script>
 <style scoped>
 .cart__table {
   padding: 5px;
 }
+
 .cart__table-delete {
   cursor: pointer;
   position: absolute;
@@ -59,6 +46,7 @@ const onBlur = (product, e) => {
   right: 1px;
   text-align: center;
 }
+
 .cart__table-amount {
   background-color: transparent;
   outline: none;
