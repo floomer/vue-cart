@@ -9,12 +9,12 @@
 <script lang="ts" setup>
 import data from "../data.json"
 import names from "../names.json";
-import { onMounted, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
 import ProductCard from "./ProductCard.vue";
 
 import { Product } from "../types/Product";
-import { Goods, Data, ReadableGoods } from "../types/Data";
+import { Goods } from "../types/Data";
 
 const products = ref<Map<string, Product[]>>(new Map());
 
@@ -24,8 +24,8 @@ const products = ref<Map<string, Product[]>>(new Map());
 
 // }
 
-async function getParsedData() {
-    data.Value.Goods.map((product: Goods) => {
+function getParsedData() {
+    data.Value.Goods.forEach((product: Goods) => {
         if (!(product.T in names[product.G].B)) {
             return null;
         }
@@ -44,9 +44,12 @@ async function getParsedData() {
 
 watch(products, () => {
     getParsedData()
-    // console.log(products)
 }, { immediate: true })
 
+// setInterval(() => {
+//     getParsedData()
+//     console.log('new data')
+// }, 15000)
 
 </script>
 

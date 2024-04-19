@@ -9,7 +9,7 @@
           {{ item.name }}
           <span>({{ item.amount }})</span>
         </span>
-        <span>{{ item.cost }}</span>
+        <span>{{ (item.cost * store.exchangeRate).toFixed(1) }}</span>
       </div>
     </div>
   </div>
@@ -19,11 +19,11 @@
 import { useCartStore } from '../store/Store';
 import type { Product } from '../types/Product';
 
-defineProps<{ product: Product; }>();
+const { product } = defineProps<{ product: Product }>();
 
 const store = useCartStore()
 
-function handleAddToCart(product) {
+function handleAddToCart(product: Product) {
   const item = store.cart.find((item) => item.id === product.id);
   if (!item) {
     store.addToCart(product)

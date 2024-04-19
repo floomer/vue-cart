@@ -6,31 +6,25 @@
     </div>
     <div>
       <label for="exchange">Exchange Rate </label>
-      <input type="number" id="exchange" placeholder="USD to RUB " @blur="" />
+      <input type="number" id="exchange" placeholder="USD to RUB " @blur="store.updateExchangeRate($event.target.value)"
+        :value="store.exchangeRate" />
     </div>
     <button class="header__button" @click="isShown = !isShown">
       <img src="../assets/cart.svg" alt="cart" class="header__cart-icon" />
     </button>
     <div class="header__cart" v-if="isShown">
       <Cart />
-      <span class="header__cart-result">Итоговая стоимость: {{ }}
+      <span class="header__cart-result">Итоговая стоимость: {{ store.resultCost }}
       </span>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import Cart from "./Cart.vue";
-// import { useCartStore } from "../store/Store";
-
-// const store = useCartStore()
-
+import { useCartStore } from "../store/Store";
+const store = useCartStore()
 const isShown = ref(false);
-
-// const handleDeleteProduct = (product) => {
-//   resultCost.value = Math.round(resultCost.value - product.cost);
-//   cart.value = cart.value.filter((prod) => prod.product.id !== product.id);
-// };
 
 </script>
 <style scoped>

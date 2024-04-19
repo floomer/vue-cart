@@ -5,16 +5,16 @@
       <th>Количество</th>
       <th>Стоимость</th>
     </tr>
-    <tr v-for="product in cart" :key="product.id">
+    <tr v-for="product in store.cart" :key="product.id">
       <td>{{ product.name }}</td>
       <td>
-        <input type="number" class="cart__table-amount" value="1" @blur="onBlur(product, $event)" />
+        <input type="number" class="cart__table-amount" :value="product.amount" @blur="onBlur(product, $event)" />
         <span>шт.</span>
       </td>
       <td>
-        {{ Math.round(product.cost) }}/шт.
+        {{ (product.cost * store.exchangeRate).toFixed(1) }}/шт.
       </td>
-      <button class="cart__table-delete" @click="$emit('delete-from-cart', product)">
+      <button class="cart__table-delete" @click="handleDeleteProduct(product)">
         x
       </button>
     </tr>
@@ -22,13 +22,16 @@
 </template>
 <script lang="ts" setup>
 import { useCartStore } from '../store/Store';
+import { Product } from '../types/Product';
 const store = useCartStore()
-const cart = store.cart
-// console.log(store.cart)
 
-const onBlur = (product, event) => {
-  console.log(product)
+function onBlur(product: Product, event: Event) {
+  store.updateItemAmount(product, (event.target as HTMLInputElement).value)
 };
+
+function handleDeleteProduct(product: Product) {
+  store.deleteFromCart(product)
+}
 
 </script>
 <style scoped>
