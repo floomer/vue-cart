@@ -3,10 +3,10 @@ export type Data = {
     Id: number;
     Success: boolean;
     Value: Value;
-}
+};
 
-interface Value  {
-    Goods: ReadableGoods[]
+interface Value {
+    Goods: Goods[];
 }
 
 export type Goods = {
@@ -16,19 +16,19 @@ export type Goods = {
     G: number;
     P: number;
     Pl: any;
-    T: number
+    T: number;
+};
+
+export const enum GoodsPropertyMap {
+    id = 'T',
+    group = 'G',
+    cost = 'C',
+    amount = 'P',
 }
 
-type GoodsPropertyMap = {
-    B: 'appear';
-    C: 'cost';
-    CV: 'color';
-    G: 'group';
-    P: 'amount';
-    Pl: 'placeholder';
-    T: 'id'
-}
-
-export type ReadableGoods = {
-    [K in keyof Goods as GoodsPropertyMap[K]]: Goods[K] // Idk why it isn't working :c
-} 
+export type MappedGoods = {
+    id: number;
+    group: number;
+    cost: number;
+    amount: number;
+};

@@ -29,7 +29,6 @@ function handleAddToCart(product: Product) {
     store.addToCart(product)
   }
 }
-
 </script>
 
 <style scoped>
@@ -53,8 +52,6 @@ function handleAddToCart(product: Product) {
 
   flex-wrap: wrap;
 }
-
-
 
 .product__body-product {
   display: flex;

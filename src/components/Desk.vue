@@ -7,50 +7,59 @@
 </template>
 
 <script lang="ts" setup>
-import data from "../data.json"
-import names from "../names.json";
-import { ref, watch } from "vue";
-
-import ProductCard from "./ProductCard.vue";
-
-import { Product } from "../types/Product";
-import { Goods } from "../types/Data";
+import { ref } from 'vue';
+import ProductCard from './ProductCard.vue';
+import { Product } from '../types/Product';
+import { Data, GoodsPropertyMap, MappedGoods } from '../types/Data';
+import { Names } from '../types/Names';
 
 const products = ref<Map<string, Product[]>>(new Map());
 
-// async function getData():Promise<Data> {
-//     const response =  await fetch ('./src/data.json')
-//     return (await response.json() as Data)
-
-// }
-
-function getParsedData() {
-    data.Value.Goods.forEach((product: Goods) => {
-        if (!(product.T in names[product.G].B)) {
-            return null;
-        }
-
-        if (!products.value.has(names[product.G].G)) {
-            products.value.set(names[product.G].G, []);
-        }
-        products.value.get(names[product.G].G)?.push({
-            id: product.T,
-            name: names[product.G].B[product.T].N,
-            cost: product.C,
-            amount: product.P,
-        })
-    });
+async function getData(): Promise<Data> {
+    return await fetch('./src/data.json').then((res) => res.json());
 }
 
-watch(products, () => {
-    getParsedData()
-}, { immediate: true })
+async function getNames(): Promise<Names> {
+    return await fetch('./src/names.json').then((res) => res.json());
+}
 
-// setInterval(() => {
-//     getParsedData()
-//     console.log('new data')
-// }, 15000)
+function parseData(data: Data): MappedGoods[] {
+    return data.Value.Goods.map((goodsItem) => ({
+        id: goodsItem[GoodsPropertyMap.id],
+        group: goodsItem[GoodsPropertyMap.group],
+        cost: goodsItem[GoodsPropertyMap.cost],
+        amount: goodsItem[GoodsPropertyMap.amount],
+    }));
+}
 
+function setProducts(mappedData: MappedGoods[], names: Names): void {
+    products.value = new Map();
+    mappedData.forEach((product) => {
+        if (!(product.id in names[product.group].B)) {
+            return null;
+        }
+        if (!products.value.has(names[product.group].G)) {
+            products.value.set(names[product.group].G, []);
+        }
+        products.value.get(names[product.group].G)?.push({
+            id: product.id,
+            name: names[product.group].B[product.id].N,
+            cost: product.cost,
+            amount: product.amount,
+        });
+    });
+}
+async function getProducts(): Promise<void> {
+    const names = await getNames();
+    const data = await getData();
+    const mappedData = parseData(data);
+    return setProducts(mappedData, names);
+}
+getProducts();
+
+setInterval(() => {
+    getProducts();
+}, 15000);
 </script>
 
 <style scoped>
