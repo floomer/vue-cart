@@ -9,26 +9,29 @@
           {{ item.name }}
           <span>({{ item.amount }})</span>
         </span>
-        <span>{{ (item.cost * store.exchangeRate).toFixed(1) }}</span>
+        <span>{{ totalCost(item) }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue';
 import { useCartStore } from '../store/Store';
 import type { Product } from '../types/Product';
 
 const { product } = defineProps<{ product: Product }>();
 
-const store = useCartStore()
+const store = useCartStore();
 
 function handleAddToCart(product: Product) {
   const item = store.cart.find((item) => item.id === product.id);
   if (!item) {
-    store.addToCart(product)
+    store.addToCart(product);
   }
 }
+
+const totalCost = computed(() => (item: Product) => (item.cost * store.exchangeRate).toFixed(1));
 </script>
 
 <style scoped>
