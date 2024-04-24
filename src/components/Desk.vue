@@ -33,6 +33,8 @@ function parseData(data: Data): MappedGoods[] {
 }
 
 function setProducts(mappedData: MappedGoods[], names: Names): void {
+
+
     products.value = new Map();
     mappedData.forEach((product) => {
         if (!(product.id in names[product.group].B)) {
@@ -50,6 +52,8 @@ function setProducts(mappedData: MappedGoods[], names: Names): void {
     });
 }
 async function getProducts(): Promise<void> {
+  // все это сделай в папке типо api
+  //  parseData  вынеси в отдельную папку типо utils
     const names = await getNames();
     const data = await getData();
     const mappedData = parseData(data);
