@@ -1,7 +1,7 @@
 <template>
   <div class="product">
     <div class="product__header">
-      <span class="product__header-header">{{ product[0] }}</span>
+      <span class="product__header-header">{{ product[0] }} </span>
     </div>
     <div class="product__body">
       <div class="product__body-product" v-for="item in product[1]" :key="item">
@@ -21,17 +21,19 @@ import { useCartStore } from '../store/Store';
 import type { Product } from '../types/Product';
 
 const { product } = defineProps<{ product: Product }>();
-
+// сделай деструризацию типо  [productGroupName,productGroupItems  ] =  product
+// потомучто  не ясно шо там
 const store = useCartStore();
 
 function handleAddToCart(product: Product) {
-  const item = store.cart.find((item) => item.id === product.id);
+  const item = store.cart.find((item) => item.id === product.id); // эту проверку перенеси в стор
   if (!item) {
     store.addToCart(product);
   }
 }
 
 const totalCost = computed(() => (item: Product) => (item.cost * store.exchangeRate).toFixed(1));
+
 </script>
 
 <style scoped>

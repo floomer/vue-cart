@@ -2,6 +2,7 @@
     <td>{{ product.name }}</td>
     <td>
         <input type="number" class="cart__table-amount" :value="product.amount" @blur="onBlur(product, $event)" />
+<!--   поставь на on change-->
         <span>шт.</span>
     </td>
     <td>

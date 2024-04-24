@@ -6,28 +6,57 @@
     </div>
     <div>
       <label for="exchange">Exchange Rate </label>
-      <input type="number" id="exchange" placeholder="USD to RUB " @blur="store.updateExchangeRate($event.target.value)"
-        :value="store.exchangeRate" />
+      <input type="number" id="exchange" placeholder="USD to RUB " @blur="updateExchangeRate($event.target.value)"
+        :value="exchangeRate" />
+      <!-- TODO  зачем onblur? exchangeRate поставь на watch и меняй c debounce -->
     </div>
     <button class="header__button" @click="isShown = !isShown">
+    <!-- isShown   в отдельный метод-->
       <img src="../assets/cart.svg" alt="cart" class="header__cart-icon" />
     </button>
     <div class="header__cart" v-if="isShown">
       <Cart />
-      <span class="header__cart-result">Итоговая стоимость: {{ store.resultCost }}
+      <span class="header__cart-result">Итоговая стоимость: {{ resultCost }}
       </span>
     </div>
   </div>
 </template>
-<script lang="ts" setup>
+
+<script lang="ts" >
+
 import { ref } from "vue";
 import Cart from "./Cart.vue";
 import { useCartStore } from "../store/Store";
-const store = useCartStore()
-const isShown = ref(false);
+export default  {
+  components:{
+    Cart,
+  },
+  setup() {
+  // везде сделай таким setup
+
+    const {
+      resultCost,
+      updateExchangeRate,
+      exchangeRate,
+    } = useCartStore()
+
+    const count = ref(0)
+    const isShown = ref(false);
+
+    return {
+      isShown,
+      resultCost,
+      updateExchangeRate,
+      exchangeRate,
+      count,
+    }
+  }
+}
 
 </script>
+
 <style scoped>
+
 .header {
   display: flex;
   align-items: center;
