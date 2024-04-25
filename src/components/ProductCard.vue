@@ -16,16 +16,16 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
+import {computed, unref} from 'vue';
 import { useCartStore } from '../store/Store';
 import type { Product } from '../types/Product';
 
 const { productGroupItems, productGroupName } = defineProps<{ productGroupItems: Product[], productGroupName: String }>();
-const store = useCartStore();
-const totalCost = computed(() => (item: Product) => (item.cost * store.exchangeRate).toFixed(1));
+const {exchangeRate,addToCart} = useCartStore();
+const totalCost = computed(() => (item: Product) => (item.cost * unref(exchangeRate)).toFixed(1));
 
 function handleAddToCart(product: Product) {
-  store.addToCart(product);
+  addToCart(product);
 }
 
 </script>
