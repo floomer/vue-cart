@@ -12,6 +12,11 @@
     <button class="header__button" @click="handleOpenCart">
       <img src="../assets/cart.svg" alt="cart" class="header__cart-icon" />
     </button>
+    <span>
+      Товаров в корзине:
+
+    <span style="color:white; background: red; border-radius: 50%; padding: .5rem"> {{cartTotalItemsValue}}</span>
+         </span>
     <div class="header__cart" v-if="isShown">
       <Cart />
       <span class="header__cart-result">Итоговая стоимость: {{ resultCost }} руб.
@@ -24,11 +29,8 @@ import { debounce } from "../utils/debounce";
 import { ref } from "vue";
 import Cart from "./Cart.vue";
 import { useCartStore } from "../store/Store";
-import { storeToRefs } from "pinia";
 
-const store = useCartStore()
-const { exchangeRate, resultCost } = storeToRefs(store)
-const { updateExchangeRate } = store
+const { updateExchangeRate,cartTotalItemsValue ,exchangeRate, resultCost} = useCartStore()
 
 const isShown = ref(false);
 

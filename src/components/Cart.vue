@@ -5,7 +5,7 @@
       <th>Количество</th>
       <th>Стоимость</th>
     </tr>
-    <tr v-for="product in store.cart" :key="product.id">
+    <tr v-for="product in cart" :key="product.id">
       <CartItem :product="product" />
     </tr>
   </table>
@@ -13,7 +13,8 @@
 <script lang="ts" setup>
 import { useCartStore } from '../store/Store';
 import CartItem from './CartItem.vue';
-const store = useCartStore()
+const {cart} = useCartStore()
+
 </script>
 <style scoped>
 .cart__table {

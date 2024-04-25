@@ -5,6 +5,6 @@ export function parseData(data: Data): MappedGoods[] {
         id: goodsItem[GoodsPropertyMap.id],
         group: goodsItem[GoodsPropertyMap.group],
         cost: goodsItem[GoodsPropertyMap.cost],
-        amount: goodsItem[GoodsPropertyMap.amount],
+        amount: goodsItem[GoodsPropertyMap.amount] || 0,
     }));
 }

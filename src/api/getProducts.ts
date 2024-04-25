@@ -31,6 +31,7 @@ function setProducts(mappedData: MappedGoods[], names: Names): typeof products {
             amount: product.amount,
         });
     });
+
     return products
 }
 export async function getProducts(): Promise<typeof products> {

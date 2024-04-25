@@ -25,7 +25,7 @@ const {exchangeRate,addToCart} = useCartStore();
 const totalCost = computed(() => (item: Product) => (item.cost * unref(exchangeRate)).toFixed(1));
 
 function handleAddToCart(product: Product) {
-addToCart(product);
+  addToCart(product);
 }
 
 </script>
