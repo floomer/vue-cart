@@ -1,15 +1,15 @@
 <template>
   <div class="product">
     <div class="product__header">
-      <span class="product__header-header">{{ product[0] }}</span>
+      <span class="product__header-header">{{ productGroupName }}</span>
     </div>
     <div class="product__body">
-      <div class="product__body-product" v-for="item in product[1]" :key="item">
-        <span class="product__name" @click="handleAddToCart(item)">
-          {{ item.name }}
-          <span>({{ item.amount }})</span>
+      <div class="product__body-product" v-for="product in productGroupItems" :key="product.id">
+        <span class="product__name" @click="handleAddToCart(product)">
+          {{ product.name }}
+          <span>({{ product.amount }})</span>
         </span>
-        <span>{{ totalCost(item) }}</span>
+        <span>{{ totalCost(product) }}</span>
       </div>
     </div>
   </div>
@@ -20,18 +20,14 @@ import { computed } from 'vue';
 import { useCartStore } from '../store/Store';
 import type { Product } from '../types/Product';
 
-const { product } = defineProps<{ product: Product }>();
-
+const { productGroupItems, productGroupName } = defineProps<{ productGroupItems: Product[], productGroupName: String }>();
 const store = useCartStore();
+const totalCost = computed(() => (item: Product) => (item.cost * store.exchangeRate).toFixed(1));
 
 function handleAddToCart(product: Product) {
-  const item = store.cart.find((item) => item.id === product.id);
-  if (!item) {
-    store.addToCart(product);
-  }
+  store.addToCart(product);
 }
 
-const totalCost = computed(() => (item: Product) => (item.cost * store.exchangeRate).toFixed(1));
 </script>
 
 <style scoped>

@@ -6,25 +6,41 @@
     </div>
     <div>
       <label for="exchange">Exchange Rate </label>
-      <input type="number" id="exchange" placeholder="USD to RUB " @blur="store.updateExchangeRate($event.target.value)"
-        :value="store.exchangeRate" />
+      <input type="number" id="exchange" placeholder="USD to RUB " @input="debouncedHandleChange"
+        :value="exchangeRate" />
     </div>
-    <button class="header__button" @click="isShown = !isShown">
+    <button class="header__button" @click="handleOpenCart">
       <img src="../assets/cart.svg" alt="cart" class="header__cart-icon" />
     </button>
     <div class="header__cart" v-if="isShown">
       <Cart />
-      <span class="header__cart-result">Итоговая стоимость: {{ store.resultCost }}
+      <span class="header__cart-result">Итоговая стоимость: {{ resultCost }} руб.
       </span>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
+import { debounce } from "../utils/debounce";
 import { ref } from "vue";
 import Cart from "./Cart.vue";
 import { useCartStore } from "../store/Store";
+import { storeToRefs } from "pinia";
+
 const store = useCartStore()
+const { exchangeRate, resultCost } = storeToRefs(store)
+const { updateExchangeRate } = store
+
 const isShown = ref(false);
+
+function handleOpenCart() {
+  isShown.value = !isShown.value
+}
+
+const debouncedHandleChange = debounce((event: Event) => {
+  if (event.target) {
+    updateExchangeRate((event.target as HTMLInputElement).value);
+  }
+}, 3500);
 
 </script>
 <style scoped>

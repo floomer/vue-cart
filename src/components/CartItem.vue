@@ -1,7 +1,7 @@
 <template>
     <td>{{ product.name }}</td>
     <td>
-        <input type="number" class="cart__table-amount" :value="product.amount" @blur="onBlur(product, $event)" />
+        <input type="number" class="cart__table-amount" :value="product.amount" @change="onChange(product, $event)" />
         <span>шт.</span>
     </td>
     <td>
@@ -22,7 +22,7 @@ const { product } = defineProps<{ product: Product }>();
 
 const productCost = computed(() => (product.cost * store.exchangeRate).toFixed(1))
 
-function onBlur(product: Product, event: Event) {
+function onChange(product: Product, event: Event) {
     store.updateItemAmount(product, (event.target as HTMLInputElement).value)
 };
 
