@@ -3,7 +3,8 @@ import { computed, ref } from 'vue';
 import { Cart } from '../types/Cart';
 import { Product } from '../types/Product';
 
-export const useCartStore = defineStore('cart', () => {
+export const useCartStore = () => {
+
     const cart = ref<Cart>([]);
     const exchangeRate = ref<number>(100);
     const resultCost = computed(() => cart.value.reduce((sum, product) => sum + product.cost * product.amount * exchangeRate.value, 0).toFixed(1));
@@ -15,7 +16,6 @@ export const useCartStore = defineStore('cart', () => {
         } else {
             item.amount++
         }
-
     }
     function deleteFromCart(product: Product) {
         const productIndex = cart.value.findIndex((item) => item.id === product.id);
@@ -34,4 +34,4 @@ export const useCartStore = defineStore('cart', () => {
     }
 
     return { cart, resultCost, exchangeRate, addToCart, deleteFromCart, updateItemAmount, updateExchangeRate };
-});
+};
