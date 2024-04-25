@@ -6,13 +6,14 @@ import { Product } from '../types/Product';
 export const useCartStore = defineStore('cart', () => {
     const cart = ref<Cart>([]);
     const exchangeRate = ref<number>(100);
-
     const resultCost = computed(() => cart.value.reduce((sum, product) => sum + product.cost * product.amount * exchangeRate.value, 0).toFixed(1));
 
     function addToCart(product: Product) {
         const item = cart.value.find((item) => item.id === product.id);
         if (!item) {
             cart.value.push({ ...product, amount: 1 });
+        } else {
+            item.amount++
         }
 
     }
